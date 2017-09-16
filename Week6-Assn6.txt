@@ -1,0 +1,86 @@
+
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
+
+/*
+  Override the & and + operators!
+*/
+
+#include "interval.h"
+
+Interval::Interval()
+{
+   xmin = 0;
+   xmax = 0;
+}
+
+Interval::Interval(int xmin, int xmax)
+{
+   this->xmin = xmin;
+   this->xmax = xmax;
+}
+
+bool Interval::isEmpty() const
+{
+   return xmin >= xmax;
+}
+   
+string Interval::toString() const
+{
+   stringstream sout;
+   sout << "[" << xmin << ", " << xmax << ")";
+   return sout.str();
+}
+
+Interval operator+(const Interval& a, const Interval& b)
+{
+   Interval t2;
+   if(a.xmin == 0 && a.xmax == 0)
+   {
+       t2.xmin = b.xmin;
+       t2.xmax = b.xmax;
+       return t2;
+   }
+   if(b.xmin == 0 && b.xmax == 0)
+   {
+       t2.xmin = a.xmin;
+       t2.xmax = a.xmax;
+       return t2;
+   }
+   
+   if(a.xmin < b.xmin)
+        t2.xmin = a.xmin;
+   else
+        t2.xmin = b.xmin;
+        
+   if(a.xmax >b.xmax)
+        t2.xmax = a.xmax;
+   else
+        t2.xmax = b.xmax;
+        
+    return t2;
+}
+
+Interval operator&(const Interval& a, const Interval& b)
+{
+    Interval t1;
+   
+    if(a.xmin < b.xmin && a.xmax < b.xmax && a.xmax > b.xmin)
+        {
+             t1.xmin =b.xmin;
+             t1.xmax=a.xmax;
+        }
+    else if(b.xmin < a.xmin && b.xmax < a.xmax && b.xmax > a.xmin)
+        {
+            t1.xmin=a.xmin;
+            t1.xmax=b.xmax;
+        }
+    else {
+        t1.xmin=0;
+        t1.xmax=0;
+    }
+       return t1;
+}
+

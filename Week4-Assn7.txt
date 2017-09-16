@@ -1,0 +1,48 @@
+#include <cstring>
+#include<iostream>
+#include<string.h>
+
+using namespace std;
+
+/**
+   Given a '\0'-terminated character array, split it by replacing 
+   each space in the character array with a '\0' and return a 
+   newly allocated array of char* pointers to the resulting strings.
+*/
+char** split(char* words)
+{
+   // count spaces
+
+   int count = 1;
+   int length = strlen(words);
+   for(int u = 0; u < length; u++)
+    {
+            if(words[u] == ' ')
+               {
+                        count++;
+                        words[u] = '\0';
+               }
+
+    }
+
+   // store results
+   string a[count];
+   char** result = new char*[count];
+
+    
+   int count1 = 0;
+   int startPosition = 0;
+   for(int i = 0; i < length; i++)
+   {
+	   if(i == 0 || words[i - 1] == '\0')
+		   startPosition = i;
+	   if(startPosition == i)
+	   {
+		   result[count1] = words + startPosition;
+		   count1++;
+	   }
+   }
+
+
+   return result;
+}

@@ -1,0 +1,55 @@
+//SOLUTION
+
+#include "path.h"
+
+/*
+   Implement the assignment operator!
+*/
+
+Path::Path(int n) 
+{
+    xy = new int[n];
+    length = n;
+}
+
+int Path::getX(int i) 
+{
+   if (0 <= i && i < length)
+      return xy[2 * i];
+   else
+      return 0;
+}
+
+int Path::getY(int i) 
+{
+   if (0 <= i && i < length)
+      return xy[2 * i + 1];
+   else
+      return 0;
+}
+
+void Path::set(int i, int x, int y) 
+{
+   if (0 <= i && i < length)
+   {
+      xy[2 * i] = x;
+      xy[2 * i + 1] = y;
+   }
+}
+
+int Path::getLength() 
+{
+   return length;
+}
+
+Path& Path::operator=(const Path& rhs)
+{
+ length = rhs.length;
+ xy = new int[length];
+  for( int j = 0; j < 2* length ; j++)
+  {
+      xy[j] = rhs.xy[j];
+  }
+ 
+ return *this  ;
+}

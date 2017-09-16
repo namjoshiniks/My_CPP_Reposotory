@@ -1,0 +1,114 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+int a[100];           //Array a is declared as global variable
+
+void createArray();   //Enters values 1-100 into array a
+void findPrimes();	  //Findsthe prime number by replacing non-prime numbers by '.'
+void printPrimes();	  //Print the contents of array a in 10 * 10 table format
+void proofOfGoldbachConjecture(); //Finds the prime number pairs for even numbers between 4-100
+
+
+int main()
+{
+    createArray();
+
+    findPrimes();
+
+    printPrimes();
+
+    proofOfGoldbachConjecture();
+
+}
+
+void createArray()
+{
+	for(int i = 0 ; i < 100 ; i++)
+	{
+		a[i] = i + 1;
+	}
+}
+
+void findPrimes()
+{
+	for(int j = 2; j <= 50; j++)
+	    {
+	    	for(int i = 0; i < 100; i++)
+	    		{
+	    		if((a[i] % j == 0 && a[i] != '.' && a[i] != j) || a[i] == 1)
+
+	    			a[i] = '.';
+	    		}
+
+	    }
+}
+
+void printPrimes()
+{
+	int arrayIndexCount = 0;
+	string space = "";
+
+    cout <<"Primes:" << endl << endl;
+
+    for(int i = 0 ;i < 10; i++)
+    {
+    	for(int j = 0;j < 10; j++)
+
+      {
+    	if(a[arrayIndexCount] == 46 || a[arrayIndexCount] < 10)
+    		space = "  ";
+    	else
+    		space = " ";
+
+    	if(a[arrayIndexCount] == 46)
+    		cout << space << '.';
+    	else
+    		cout << space << a[arrayIndexCount];
+
+    	arrayIndexCount++;
+      }
+      cout << endl;
+    }
+    cout << endl;
+}
+
+void proofOfGoldbachConjecture()
+{
+	string space = "";
+	bool flag = true;
+	space = "";
+	cout << "Test of Goldbach's Conjecture:" << endl << endl;
+
+	for(int i = 4; i <= 100; i = i + 2 )
+	{
+	    if(i < 10)
+	    	space = "  ";
+	    else if(i >= 10 && i < 100)
+	   	    space = " ";
+	   	else
+	   		space = "";
+	   	flag = true;
+    	cout << space << i << ":" << " " ;
+    	for(int j = 1; j < i; j++)
+	    {
+	   		for(int k = j; k < i; k++)
+	    	{
+	    		if(a[j] != '.' && a[k] != '.' && ((a[j] + a[k]) == i))
+	    		{
+	                if(flag == true)
+	    			{
+	    				cout << setw(2) << a[j] << " " << setw(2) << a[k] << endl;
+	    				flag = false;
+	    			}
+	    			else
+	    				cout << setw(7) << a[j] << " " << setw(2) << a[k] << endl;
+	    		}
+	    	}
+	    }
+	    if(i < 100)
+	    	cout << endl;
+	}
+}

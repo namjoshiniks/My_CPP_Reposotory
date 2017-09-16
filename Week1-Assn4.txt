@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main()
+{
+   cout << "Enter values, -1 when done: ";
+   int result;
+   // Read in numbers from cin. Stop when a value of -1 is entered.
+   // Print the input that is closest to 100. If there are multiple
+   // inputs that have the same minimal distance 100,
+   // print the first one.
+   // If no input was provided (other than the -1 sentinel),
+   // print -1
+   int temp[100],i;
+   
+   for(i=0;i<100;i++)
+   {
+        cin>>temp[i];
+        if(temp[i]==-1)
+            break;
+   }
+
+   int minDistance=100;
+   result=-1;
+   i=0;
+   while(temp[i]!=-1)
+   {
+       if(temp[i]>100)
+       {
+           if(minDistance>(temp[i]-100))
+           {
+            minDistance=temp[i]-100;
+            result=temp[i];
+           }
+       }
+       else
+       {
+           if(minDistance>(100-temp[i]))
+           {
+               minDistance=100-temp[i];
+               result=temp[i];
+           }
+       }
+       i++;
+       
+       
+       
+   }
+   
+  
+   cout << endl << "Result: " << result << endl;
+   return 0;
+}

@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int main()
+{
+   cout << "Enter n: ";
+   int n;
+   cin >> n;
+   cout << endl;
+   
+   // Draw the following "x in a box" pattern. There are n asterisks
+   // on each side. In this example, n is 8.
+   // ********
+   // **    **
+   // * *  * *
+   // *  **  *
+   // *  **  *
+   // * *  * *
+   // **    **
+   // ********
+   int i,j;
+   for(i=0;i<n;i++)
+    cout<<"*";
+   cout<<endl;    
+   for(i=1;i<=n-2;i++)
+   {
+       cout<<"*";
+      for(j=1;j<=n-2;j++)
+      {
+          if((i==j)||j==(n-i-1))
+          cout<<"*";
+          else
+          cout<<" ";
+      }
+      cout<<"*";
+      cout<<endl;
+   }
+   if(n>1)
+   {
+   for(i=0;i<n;i++)
+    cout<<"*";
+   cout<<endl;
+   }
+   return 0;
+}

@@ -1,0 +1,318 @@
+#include "RomanNumeral.h"
+#include <iostream>
+#include <string.h>
+#include <fstream>
+#include <vector>
+#include <math.h>
+using namespace std;
+
+/**
+ * Default constructor.
+ */
+RomanNumeral::RomanNumeral() : roman(""), decimal(0)
+{
+}
+
+RomanNumeral :: RomanNumeral(string roman) : roman(roman)
+{
+	toDecimal();
+}
+RomanNumeral :: RomanNumeral(int value) : decimal(value)
+{
+	toRoman();
+}
+
+
+string RomanNumeral :: get_roman()
+{
+	return roman;
+}
+
+
+int RomanNumeral :: get_decimal()
+{
+	return decimal;
+}
+
+void RomanNumeral :: toDecimal()
+{
+  int sum = 0;
+  int temp = 0;
+  bool flag = false;
+  for (int i = 0; i < roman.length() ; i++)
+  {
+
+	  if(flag)
+	  {
+		  flag = false;
+		  continue;
+	  }
+
+	  temp = getIntValue(roman[i]);
+
+	  if(i + 1 < roman.length() && temp < getIntValue(roman[i + 1]))
+	  {
+
+		  temp =  getIntValue(roman[i + 1]) - temp;
+		  flag = true;
+
+	  }
+
+	  sum = sum + temp;
+
+  }
+
+  decimal = sum;
+}
+
+void RomanNumeral :: toRoman()
+{
+	vector<int> numeralPosition;
+	int vectorLength;
+	int digitsPlace = 1;
+	int temp = decimal;
+	while(temp != 0)
+	{
+		numeralPosition.push_back((temp % 10) * digitsPlace);
+		temp = temp / 10;
+		digitsPlace = digitsPlace * 10;
+	}
+
+	vectorLength = numeralPosition.size();
+
+	string romanValue = "";
+
+
+	for(int i = vectorLength - 1; i >= 0; i--)
+	{
+
+		romanValue = romanValue + convertToRoman(numeralPosition[i]);
+
+	}
+
+	roman = romanValue;
+
+}
+
+int RomanNumeral :: getIntValue(char romanLetter)
+{
+	string tempRoman = "";
+	romanValue a;
+	int returnValue;
+
+	if(romanLetter == 'I')
+	{
+		returnValue = a.romanI;
+	}
+	if(romanLetter == 'V')
+	{
+		returnValue = a.romanV;
+	}
+	if(romanLetter == 'X')
+	{
+		returnValue = a.romanX;
+	}
+	if(romanLetter == 'L')
+	{
+		returnValue = a.romanL;
+	}
+	if(romanLetter == 'C')
+	{
+		returnValue = a.romanC;
+	}
+	if(romanLetter == 'D')
+	{
+		returnValue = a.romanD;
+	}
+	if(romanLetter == 'M')
+	{
+		returnValue = a.romanM;
+	}
+
+	return returnValue;
+}
+
+string RomanNumeral :: convertToRoman(int tempValue)
+{
+	romanValue a;
+	string romanChar1;
+	string romanChar2;
+	string RomanIncrementChar;
+	int value1;
+	int value2;
+	string returnString = "";
+	int increment;
+	string base;
+
+	if(tempValue >= a.romanI && tempValue < a.romanV)
+	{
+		romanChar1 = "I";
+		value1 = a.romanI;
+		romanChar2 = "V";
+		value2 = a.romanV;
+		increment = 1;
+		RomanIncrementChar = "I";
+		base = "";
+	}
+	if(tempValue >= a.romanV && tempValue < a.romanX)
+	{
+		romanChar1 = "V";
+		value1 = a.romanV;
+		romanChar2 = "X";
+		value2 = a.romanX;
+		increment = 1;
+		RomanIncrementChar = "I";
+		base = "V";
+	}
+	if(tempValue >= a.romanX && tempValue < a.romanL)
+	{
+		romanChar1 = "X";
+		value1 = a.romanX;
+		romanChar2 = "L";
+		value2 = a.romanL;
+		increment = 10;
+		RomanIncrementChar = "X";
+		base = "";
+	}
+	if(tempValue >= a.romanL && tempValue < a.romanC)
+	{
+		romanChar1 = "L";
+		value1 = a.romanL;
+		romanChar2 = "C";
+		value2 = a.romanC;
+		increment = 10;
+		RomanIncrementChar = "X";
+		base = "L";
+	}
+	if(tempValue >= a.romanC && tempValue < a.romanD)
+	{
+		romanChar1 = "C";
+		value1 = a.romanC;
+		romanChar2 = "D";
+		value2 = a.romanD;
+		increment = 100;
+		RomanIncrementChar = "C";
+		base = "";
+	}
+	if(tempValue >= a.romanD && tempValue < a.romanM)
+	{
+		romanChar1 = "D";
+		value1 = a.romanD;
+		romanChar2 = "M";
+		value2 = a.romanM;
+		increment = 100;
+		RomanIncrementChar = "C";
+		base = "D";
+	}
+	if(tempValue >= a.romanM)
+	{
+		romanChar1 = "M";
+		value1 = a.romanM;
+		increment = 1000;
+		RomanIncrementChar = "M";
+		base = "";
+	}
+
+	if(tempValue == value1)
+	{
+		returnString = returnString + romanChar1;
+	}
+	else if(tempValue > value1)
+	{
+		returnString = base;
+		int temp = tempValue;
+		if(base != "")
+			temp = tempValue - value1;
+
+		if(int(temp/increment) > 3)
+			returnString = RomanIncrementChar + romanChar2;
+		else
+		{
+			for(int i = 0; i < int(temp/increment); i++)
+			{
+				returnString = returnString + RomanIncrementChar;
+			}
+		}
+	}
+
+
+	return returnString;
+}
+
+
+int operator +(RomanNumeral& r1, RomanNumeral& r2)
+{
+
+	int value1 = r1.decimal;
+	int value2 = r2.decimal;
+
+	return value1 + value2;
+}
+
+int operator +(RomanNumeral& r1, int a)
+{
+	int value = r1.decimal;
+
+	return value + a;
+}
+
+int operator -(RomanNumeral& r1, RomanNumeral& r2)
+{
+
+	int value1 = r1.decimal;
+	int value2 = r2.decimal;
+
+	return value1 - value2;
+}
+
+int operator *(RomanNumeral& r1,RomanNumeral& r2)
+{
+	int value1 = r1.decimal;
+	int value2 = r2.decimal;
+
+	return value1 * value2;
+}
+
+int operator /(RomanNumeral& r1, RomanNumeral& r2)
+{
+	int value1 = r1.decimal;
+	int value2 = r2.decimal;
+
+	return value1 / value2;
+}
+
+bool operator ==(RomanNumeral& r1, RomanNumeral& r2)
+{
+	if(r1.decimal == r2.decimal)
+		return true;
+	else
+		return false;
+
+
+}
+
+bool operator !=(RomanNumeral& r1, RomanNumeral& r2)
+{
+	if(r1.decimal == r2.decimal)
+		return true;
+	else
+		return false;
+
+
+}
+
+istream& operator >>(istream& in, RomanNumeral& r1)
+{
+	string romanNumber ="";
+	in >> romanNumber;
+	r1.roman = romanNumber;
+	r1.toDecimal();
+
+	return in;
+}
+
+ostream& operator <<(ostream& outs,RomanNumeral& r1)
+{
+	outs << "[" << r1.decimal << ":" << r1.roman << "]";
+	return outs;
+}

@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+/**
+   Given pointers start and end that point to the 
+   first and past the last element of a segment inside
+   an array, reverse all elements in the segment.
+*/
+void reverse(int* start, int* end)
+{
+   int length = end - start;
+   int * p1, * p2;
+  p1 = start;
+  p2 = end - 1;
+  
+   
+   for(int i = 0; i < length/2; i++)
+   {
+     
+    swap(*(p1 + i),*(p2 - i)) ;
+   }
+   
+}
+
+void swap(int* first1, int* first2)
+{
+    int temp;
+    
+    temp = *first1;
+    *first1 = *first2;
+    *first2 = temp;
+}

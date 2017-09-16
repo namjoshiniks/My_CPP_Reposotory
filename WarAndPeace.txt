@@ -1,0 +1,166 @@
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <vector>
+
+#include <iomanip>
+
+using namespace std;
+
+// Names to search for.
+const string MAKAR  = "Makar Alexeevich";
+const string JOSEPH = "Joseph Bazdeev";
+const string BORIS  = "Boris Drubetskoy";
+
+string name = "";
+string temp = "";
+
+int originalPosition = 0;
+int positionCount = 0;
+
+bool flag1 = true;
+bool flag2 = false;
+bool flag3 = true;
+
+const string INPUT_FILE_NAME = "WarAndPeace.txt";
+
+void insertToVector(vector<char> &letters , string &line);
+void printHeader();
+void findNames(vector<char> &letters, int& lineCount , string& line);
+void printOutput(int lineCount, int positionCount);
+
+int main()
+{
+    ifstream input;
+    input.open("WarAndPeace.txt");
+
+    if (input.fail())
+    {
+        cout << "Failed to open " << INPUT_FILE_NAME << endl;
+        return -1;
+    }
+
+    int lineCount = 0;
+
+    string line = "";
+
+    vector<char> letters;
+
+    printHeader();
+
+    while(getline(input,line))
+    {
+     lineCount++;
+
+     insertToVector(letters, line);
+
+     findNames(letters, lineCount, line );
+    }
+
+}
+
+void insertToVector(vector<char> &letters, string& line)
+{
+	for(int i = 0; i < line.length(); i++)
+	{
+	   letters.push_back(line[i]);
+    }
+}
+
+void findNames(vector<char> &letters, int& lineCount , string& line)
+{
+	for(int i = 0; i < line.length(); i++)
+	{
+
+	 if(flag2 == true)
+	 {
+
+	    flag2 = false;
+	    if( letters.at(0) == temp[0])
+	    {
+	       flag3 = false;
+	       for(int j = i + 1; j <= i + temp.length() - 1; j++)
+	       {
+	    	  if(letters.at(j) != temp[j - i])
+	    	  {
+	    		 flag3 = true;
+	    		 break;
+	    	  }
+
+	       }
+	    }
+
+	  }
+     if(flag3 == false)
+	 {
+	    positionCount = originalPosition;
+	    printOutput(lineCount - 1, positionCount);
+	    flag3 = true;
+	 }
+
+     if(letters.at(i) == 'M' || letters.at(i) == 'J' || letters.at(i) == 'B')
+	 {
+	   flag1 = false;
+	   if(letters.at(i) == 'M')
+	   {
+	      name = MAKAR;
+	      temp = "Alexeevich";
+	   }
+	   else if(letters.at(i) == 'J')
+	   {
+	      name = JOSEPH;
+	      temp = "Bazdeev";
+	   }
+	   else
+	   {
+	      name = BORIS;
+	      temp = "Drubetskoy";
+	   }
+
+	   for(int j = i + 1; j <= i + name.length() - 1; j++)
+	   {
+
+	     if(letters.at(j) != name[j-i] || j == line.length()- 1)
+	     {
+	        flag1 = true;
+	        if(j - i == name.length() - 1 && j - i == name.length() - 1)
+	     		flag1 = false;
+
+	     	if(j == line.length()- 1 && j - i != name.length() - 1 )
+	     	{
+                flag2 = true;
+	     		originalPosition = i + 1;
+
+	     	}
+	        break;
+	      }
+
+
+	    }
+	    if(flag2 == true)
+	       break;
+	  }
+
+	  if(flag1 == false)
+	  {
+	     positionCount = i + 1;
+	     printOutput(lineCount, positionCount);
+	     flag1 = true;
+	  }
+	}
+
+	flag1 = true;
+	flag3 = true;
+	letters.clear();
+
+}
+
+void printHeader()
+{
+	cout << setw(5) << "LINE" << " " << "POSITION" << " " << "NAME" <<endl;
+}
+
+void printOutput(int lineCount, int positionCount)
+{
+	cout << setw(5) << lineCount << setw(9) << positionCount << " " << name << endl;
+}

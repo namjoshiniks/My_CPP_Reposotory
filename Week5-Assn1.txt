@@ -1,0 +1,27 @@
+#include <cmath>
+
+#include "point.h"
+
+/**
+   Compute the distance between two points.
+   @param a, b two points
+   @return the distance between them.
+*/
+double distance(Point a, Point b)
+{
+   return sqrt(pow((a.x-b.x),2) + pow ((a.y - b.y),2));
+}
+
+/**
+   Compute the midpoint between two points.
+   @param a, b two points
+   @return the point halfway between them.
+*/
+Point midpoint(Point a, Point b)
+{
+   Point n;
+   n.x = (a.x + b.x)/2;
+   n.y = (a.y + b.y)/2;
+   
+   return n;
+}

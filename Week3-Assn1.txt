@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>
+using namespace std;
+
+
+/*
+  Read numbers from standard input and print the average of 
+  all positive numbers, with two digits after the decimal point.
+   
+  The end of input is indicated by a number 0. For example, 
+  if the input is 
+
+  1 2 4 -3 5 -6 0
+  
+  then you print "Average: 3.00". If there are no positive elements,
+  print "Average: 0.00".
+*/
+
+int main()
+{
+   vector<double> numbers;
+   double temp,average;
+   average=0;
+   while(1)
+   {
+       cin>>temp;
+       if(temp==0)
+         break;
+       numbers.push_back(temp);
+   }
+   for(int i=0;i<numbers.size();i++)
+   {
+       average=average+numbers[i];
+   }
+   if(numbers.size()==0)
+        cout<<"Average: "<<setprecision(2)<<fixed<<average;
+   else    
+        cout<<"Average: "<<setprecision(2)<<fixed<<(average/numbers.size());
+   return 0;
+}

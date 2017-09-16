@@ -1,0 +1,24 @@
+/**
+   Return the nth digit from the back (that is, the factor of pow(10, n)
+   in the decimal representation of the given number).
+   @param num a number
+   @param n the power of 10 for which we want the digit
+   @return the nth digit 
+   E.g. nthDigit(1729, 1) is 2 since 1729 = 9*pow(10, 0) + 2*pow(10,1) + ...
+   Hint: Keep dividing by 10
+*/
+#include<cmath>
+int nthDigit(int num, int n)
+{
+   int temp=num,count=-1,result;
+   
+   while(count!=n)
+   {
+       count++;
+       result=temp%10;
+       
+       temp=(temp/10);
+       
+   }
+   return result;
+}

@@ -1,0 +1,176 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+
+
+const string INPUT_FILE_NAME = "students.txt";
+int getSubjectNameAndStudentCountAndInitializeArrays(string line, int& noOfStudents, string*& studentNames,int**& studentScores, int*& scoreCount);
+int getStudentNamesAndSubjectCount(string* studentNames, int noOfStudents, string line, int lineCount, int& scorePosition);
+int convertStringToInteger(string s);
+void printOutput(int noOfStudents, string* studentNames, int** studentScores, int* scoreCount);
+
+
+
+/**
+ * Main.
+ */
+int main()
+{
+    ifstream input;
+
+    int lineCount = 0;
+    int noOfStudents = 0;
+    int *scoreCount = NULL;
+    int** studentScores = NULL;
+
+    string line;
+    string* studentNames = NULL;
+
+
+    input.open("students.txt");
+    if (input.fail())
+    {
+        cout << "Failed to open " << INPUT_FILE_NAME << endl;
+        return -1;
+    }
+
+
+    while(getline(input,line))
+    {
+
+		lineCount++;
+		if(lineCount == 1)
+		{
+			noOfStudents = getSubjectNameAndStudentCountAndInitializeArrays(line, noOfStudents, studentNames, studentScores, scoreCount);
+
+		}
+		else
+		{
+			int scorePosition;
+			scoreCount[lineCount - 2] = getStudentNamesAndSubjectCount(studentNames, noOfStudents, line, lineCount, scorePosition);
+			studentScores[lineCount - 2] = new int[scoreCount[lineCount - 2]];
+			int counter = 0;
+			string temp = "";
+			for(int i = scorePosition; i < line.length(); i++)
+			{
+
+				if(isdigit(line[i]))
+				{
+					temp = temp + line[i];
+
+				}
+				if(line[i] == ' ' || i == line.length() - 1)
+				{
+					studentScores[lineCount - 2][counter] = convertStringToInteger(temp);
+					counter++;
+					temp = "";
+				}
+			}
+		}
+    }
+
+    printOutput(noOfStudents, studentNames, studentScores, scoreCount);
+
+    delete []studentNames;
+    delete []studentScores;
+    delete []scoreCount;
+
+}
+
+
+int getSubjectNameAndStudentCountAndInitializeArrays(string line, int& noOfStudents, string*& studentNames,int**& studentScores, int*& scoreCount)
+{
+	string subject = "";
+	bool flag = false;
+
+	int length1 = line.length();
+
+
+	for(int i = 0; i < length1 - 1; i++)
+	{
+		if(line[i] == ' ' && i != length1 - 1 )
+			{
+			flag = true;
+			int a = line[i + 1] - '0';
+			int b = line[i + 2] - '0';
+			noOfStudents =  b * 1 + a * 10;
+			}
+		if(line[i] != ' ')
+		{
+			if(flag == false)
+			{
+			subject = subject + line[i];
+			}
+
+		}
+
+	}
+	studentNames = new string[noOfStudents];
+	studentScores = new int*[noOfStudents];
+	scoreCount = new int[noOfStudents];
+	cout << "STUDENT SCORES for " << subject << endl << endl;
+
+	return noOfStudents;
+
+}
+
+int getStudentNamesAndSubjectCount(string* studentNames, int noOfStudents, string line, int lineCount, int& scorePosition)
+{
+	int b;
+	string temp = "";
+
+	for(int i = 0; i < line.length(); i++)
+
+	{
+		if(!isdigit(line[i]))
+		{
+			temp = temp + line[i];
+		}
+		else
+		{
+			b = line[i] - '0';
+			scorePosition = i + 2;
+			break;
+		}
+	}
+
+	 studentNames[lineCount - 2] = temp;
+
+	 return b;
+}
+
+int convertStringToInteger(string s)
+{
+	int length1 = s.length();
+	if(length1 == 1)
+		return ((s[0] - '0') * 1);
+	else if(length1 == 2)
+		return ((s[0] - '0') * 10 + (s[1] - '0') * 1);
+	else
+		return ((s[0] - '0') *100 + (s[1] - '0') *10 + (s[2] - '0') * 1);
+}
+
+void printOutput(int noOfStudents, string* studentNames, int** studentScores, int* scoreCount)
+{
+	for(int i = 0; i < noOfStudents; i++)
+	{
+		cout << studentNames[i] << endl;
+		if(scoreCount[i] == 0)
+		{
+			cout << "   " << "(none)";
+		}
+		for( int j = 0; j < scoreCount[i] ; j++)
+		{
+			cout << setw(5) << studentScores[i][j];
+
+		}
+		cout << endl << endl;
+		delete [] studentScores[i];
+
+	}
+}

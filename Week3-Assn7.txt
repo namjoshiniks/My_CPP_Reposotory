@@ -1,0 +1,45 @@
+#include <string>
+#include <cstring>
+#include <iostream>
+using namespace std;
+
+/**
+   Compuute a string that interleaves the characters in strings s and t.
+   If one string is longer than the other, append the suffix.
+   For example, splicing "Hello" and "Goodbye" yields "HGeololdobye".
+   Place the result into the character array r of size rlen.
+   If the result does not fit, truncate it to rlen - 1 characters 
+   and a '\0' terminator.
+*/
+void splice(const char s[], const char t[], char r[], int rlen)
+{
+   string c="";
+   int len1,len2,maxLen;
+   string a,b;
+   a=s;
+   b=t;
+   len1=a.length();
+   len2=b.length();
+   if(len1>len2)
+    maxLen=len1;
+   else
+    maxLen=len2;
+
+for(int i=0;i<maxLen;i++)
+{
+    if(i>=len1 && i<len2)
+       c=c+b[i];
+    else if(i>=len2 && i<len1)
+       c=c+a[i];
+    else if(i<len1 && i<len2)
+       c=c+a[i]+b[i];
+} 
+
+maxLen=c.length();
+
+for(int i=0;i<rlen;i++)
+{
+    r[i]=c[i];
+}
+
+}

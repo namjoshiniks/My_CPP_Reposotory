@@ -1,0 +1,275 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+struct EmployeeData
+{
+
+	int stateID;
+	int plantID;
+	int deptID;
+	int empID;
+	int count;
+
+};
+class WidgetReport
+{
+    /***** Complete this class. *****/
+
+public:
+
+	WidgetReport(ifstream& in);  // constructor
+    void print();
+
+
+
+private:
+
+    void printHeader();
+    void getAndPrintCurrentLineData(bool flag);
+    void takeNextLineDataAndStore(bool flag);
+    void compareWithNextLineDataAndGetCounts();
+
+    ifstream& input;  // reference to the input stream
+    string line;
+    int lineCount ;
+    int identityCount;
+    EmployeeData first;
+    EmployeeData next;
+    string name;
+    int plantCount;
+    int deptCount;
+    int totalCount;
+    int stateCount;
+};
+
+const string INPUT_FILE_NAME = "widgets.txt";
+
+int main()
+{
+    ifstream input;
+    input.open("widgets.txt");
+    if (input.fail())
+    {
+        cout << "Failed to open " << INPUT_FILE_NAME << endl;
+        return -1;
+    }
+
+    // Generate and print the Widget Report.
+
+    /***** Complete this main. *****/
+    WidgetReport w(input);
+    w.print();
+
+    input.close();
+    return 0;
+}
+
+/***** Put member function definitions after the main. *****/
+
+WidgetReport :: WidgetReport(ifstream& in): input(in)
+{
+	line = "";
+	lineCount = 0;
+	identityCount = 0;
+	plantCount = 0;
+	deptCount = 0;
+	totalCount = 0;
+	stateCount = 0;
+}
+
+void WidgetReport :: printHeader()
+{
+
+	cout << "STATE" << " " << "PLANT" << " " << "DEPT" << " " << "EMPID" << " " << "COUNT" << " " << "NAME" << endl;
+	cout << endl;
+}
+
+void WidgetReport :: getAndPrintCurrentLineData(bool flag)
+{
+	for(int i = 0; i < line.length(); i++)
+	{
+
+		if(flag == false && isdigit(line[i]))
+		{
+			identityCount++;
+			if(identityCount == 1)
+			{
+				first.stateID = atoi(&line[i]);
+				cout << setw(5) << first.stateID ;
+			}
+			else if(identityCount == 2)
+			{
+				first.plantID = atoi(&line[i]) ;
+				cout << setw(6) << first.plantID ;
+			}
+			else if(identityCount == 3)
+			{
+				first.deptID = atoi(&line[i]);
+				cout << setw(5) << first.deptID ;
+			}
+			else if(identityCount == 4)
+			{
+				first.empID = atoi(&line[i]);
+				cout << setw(6) << first.empID ;
+			}
+			else if(identityCount == 5)
+			{
+				first.count = atoi(&line[i]);
+				cout << setw(6) << first.count ;
+			}
+			flag = true;
+		}
+		if(line[i] == ' ' || isalpha(line[i]))
+			flag = false;
+
+		if(isalpha(line[i]) || line[i] == ' ')
+		{
+			if(line[i - 1] == ' ' || isalpha(line[i - 1]))
+				name = name + line[i];
+		}
+
+
+	}
+	cout << " " << name << endl;
+}
+
+void WidgetReport :: takeNextLineDataAndStore(bool flag)
+{
+	for(int i = 0; i < line.length(); i++)
+	{
+
+		if(flag == false && isdigit(line[i]))
+		{
+			identityCount++;
+			if(identityCount == 1)
+			{
+				next.stateID = atoi(&line[i]);
+			}
+			else if(identityCount == 2)
+			{
+				next.plantID = atoi(&line[i]) ;
+			}
+			else if(identityCount == 3)
+			{
+				next.deptID = atoi(&line[i]);
+			}
+			else if(identityCount == 4)
+			{
+				next.empID = atoi(&line[i]);
+			}
+			else if(identityCount == 5)
+			{
+				next.count = atoi(&line[i]);
+			}
+			flag = true;
+		}
+		if(line[i] == ' ' || isalpha(line[i]))
+			flag = false;
+
+	}
+}
+
+void WidgetReport :: compareWithNextLineDataAndGetCounts()
+{
+	if(first.stateID == next.stateID && first.plantID == next.plantID && first.deptID == next.deptID)
+	{
+		stateCount = stateCount + first.count;
+		plantCount = plantCount + first.count;
+		deptCount = deptCount + first.count;
+		totalCount = totalCount + first.count;
+	}
+	else if(first.stateID == next.stateID && first.plantID == next.plantID && first.deptID != next.deptID)
+	{
+		stateCount = stateCount + first.count;
+		plantCount = plantCount + first.count;
+		deptCount = deptCount + first.count;
+		totalCount = totalCount + first.count;
+
+		cout<<endl;
+		cout << setw(28) << deptCount <<" TOTAL FOR DEPT" << setw(4) << first.deptID << " *" <<endl;
+		cout<<endl;
+
+		deptCount = 0;
+	}
+	else if(first.stateID == next.stateID && first.plantID != next.plantID)
+	{
+		stateCount = stateCount + first.count;
+		plantCount = plantCount + first.count;
+		deptCount = deptCount + first.count;
+		totalCount = totalCount + first.count;
+
+		cout<<endl;
+		cout << setw(28) << deptCount <<" TOTAL FOR DEPT" << setw(4) << first.deptID << " *" <<endl;
+		cout << setw(28) << plantCount <<" TOTAL FOR PLANT" << setw(3) << first.plantID << " **" <<endl;
+		cout<<endl;
+
+		deptCount = 0;
+		plantCount = 0;
+	}
+	else if(first.stateID != next.stateID)
+	{
+		stateCount = stateCount + first.count;
+		plantCount = plantCount + first.count;
+		deptCount = deptCount + first.count;
+		totalCount = totalCount + first.count;
+
+		cout<<endl;
+		cout << setw(28) << deptCount <<" TOTAL FOR DEPT" << setw(4) << first.deptID << " *" <<endl;
+		cout << setw(28) << plantCount <<" TOTAL FOR PLANT" << setw(3) << first.plantID << " **" <<endl;
+		cout << setw(28) << stateCount <<" TOTAL FOR STATE" << setw(3) << first.stateID << " ***" << endl;
+		cout<<endl;
+
+		deptCount = 0;
+		plantCount = 0;
+		stateCount = 0;
+	}
+
+}
+
+void WidgetReport :: print()
+{
+	printHeader();
+
+	while(getline(input, line))
+	{
+		bool flag = false;
+		identityCount = 0;
+		lineCount++;
+		name = "";
+
+		if(lineCount != 1 && lineCount != 2)
+		{
+			takeNextLineDataAndStore(flag);
+			compareWithNextLineDataAndGetCounts();
+
+		}
+
+		identityCount = 0;
+		flag = false;
+
+		if(lineCount != 1)
+		{
+			getAndPrintCurrentLineData(flag);
+		}
+
+	}
+
+	stateCount = stateCount + first.count;
+	plantCount = plantCount + first.count;
+	deptCount = deptCount + first.count;
+	totalCount = totalCount + first.count;
+
+	cout<<endl;
+	cout << setw(28) << deptCount <<" TOTAL FOR DEPT" << setw(4) << first.deptID << " *" <<endl;
+	cout << setw(28) << plantCount <<" TOTAL FOR PLANT" << setw(3) << first.plantID << " **" <<endl;
+	cout << setw(28) << stateCount <<" TOTAL FOR STATE" << setw(3) << first.stateID << " ***" << endl;
+	cout<<endl;
+
+	cout << setw(28) << totalCount <<" GRAND TOTAL" << setw(12) << "****";
+}
+

@@ -1,0 +1,26 @@
+#include <cstring>
+
+using namespace std;
+
+/**
+   Given a '\0'-terminated character array, split it by replacing 
+   each space in the character array with a '\0'. Return the number
+   of strings into which you have split the input.
+*/
+int split(char* words)
+{
+   int count = 1;
+   int length = strlen(words);
+   for(int i = 0; i < length; i++)
+    {
+            if(words[i] == ' ')
+               {
+                        count++;
+                        words[i] = '\0';
+               }
+           
+    }
+   
+     return count;
+    
+    }

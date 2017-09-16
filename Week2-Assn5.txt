@@ -1,0 +1,29 @@
+/**
+   We have three t-shirts in sizes small, medium, and large.
+   Write a function that takes the weights of three people
+   and sets them so that the first parameter becomes
+   the weight of the person who should get the small shirt
+   (i.e. the lightest one), the second one becomes the weight 
+   of the person who should get the medium one (i.e. the
+   second-lightest one), and the third parameter becomes
+   the weight of the person who should get the largest one.
+   
+*/
+void swap(int&, int&);
+void smlShirts(int& first, int& second, int& third)
+{
+   if(second<first)
+    swap(first,second);
+   if(third<first)
+    swap(first,third);
+   if(third<second)
+    swap(third,second);
+}
+
+void swap(int& one, int& two)
+{
+    int temp;
+    temp=one;
+    one=two;
+    two=temp;
+}

@@ -1,0 +1,49 @@
+#ifndef ROMANNUMERAL_H_
+#define ROMANNUMERAL_H_
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct romanValue  // Defines the integer values of the Roman Symbols
+{
+ int romanI = 1;
+ int romanV = 5;
+ int romanX = 10;
+ int romanL = 50;
+ int romanC = 100;
+ int romanD = 500;
+ int romanM = 1000;
+};
+
+class RomanNumeral
+{
+public:
+    RomanNumeral();
+    RomanNumeral(string roman); //initializes roman variable
+    RomanNumeral(int value); //initializes decimal variable
+
+    string get_roman(); //return roman value of roman numeral
+    int get_decimal(); // return decimal value of roman numeral
+
+    friend int operator +(RomanNumeral& r1, RomanNumeral& r2); //returns sum of decimal variables of two object instances
+    friend int operator +(RomanNumeral& r1, int a); // returns sum of decimal variable of object and integer value
+    friend int operator -(RomanNumeral& r1, RomanNumeral& r2); //returns difference of decimal variables of two object instances
+    friend int operator *(RomanNumeral& r1, RomanNumeral& r2); //returns product of decimal variables of two object instances
+    friend int operator /(RomanNumeral& r1, RomanNumeral& r2); //returns division of decimal variables of two object instances
+    friend istream& operator >>(istream& outs,RomanNumeral& r1); //takes object as input and sets its string roman variable
+    friend ostream& operator <<(ostream& outs,RomanNumeral& r1); //outputs object variables decimal and roman in format[]
+    friend bool operator ==(RomanNumeral& r1, RomanNumeral& r2); //compares two decimal values and returns true if values equal
+    friend bool operator !=(RomanNumeral& r1, RomanNumeral& r2); //compares two decimal values and returns true if values are unequal
+
+private:
+    string roman;      // Roman numeral as a string
+    int decimal;    // decimal value of the Roman numeral
+    void toRoman();    // calculate string from decimal value
+    void toDecimal();  // calculate decimal value from string
+    int getIntValue(char romanLetter); //Use to access and return the decimal value of roman symbol from structure
+    string convertToRoman(int tempValue); //Takes integer value and converts it to roman numeral
+};
+
+#endif /* ROMANNUMERAL_H_ */
+;

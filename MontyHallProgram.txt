@@ -1,0 +1,157 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <ctime>
+#include <stdlib.h>
+#include <string>
+
+using namespace std;
+typedef int Door;
+
+const int SIMULATION_COUNT = 100;
+
+/**
+ * Suggested problem decomposition.
+ * You do not have to use these function declarations.
+ */
+
+void simulate(int sequence, int& win1, int& win2);
+Door hideCar();
+void setGoatDoor(int& x,int& y,int& z);
+Door openDoor(Door firstChoiceDoor, Door carBehindDoor);
+Door makeFirstChoice();
+Door makeSecondChoice(Door firstChoiceDoor, Door openedDoor);
+void printHeader();
+
+/**
+ * Main
+ */
+int main()
+{
+    int win1 = 0, win2 = 0;
+
+    srand(time(NULL));  // seed the random number generator
+    printHeader();
+
+    // Run the simulations.
+    for (int i = 1; i <= SIMULATION_COUNT; i++) simulate(i, win1, win2);
+
+    cout << endl;
+    cout << setw(4) << win1 << " wins if stay with the first choice" << endl;
+    cout << setw(4) << win2 << " wins if switch to the second choice" << endl;
+
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(1);
+
+    cout << endl;
+    cout << "Win ratio of switch over stay: ";
+    cout << static_cast<double>(win2)/win1 << endl;
+}
+
+
+void simulate(int sequence, int& win1, int& win2)
+{
+    static int count = 0;
+    count++;
+    string s,winFirst,winSecond;
+    winFirst = "   ";
+    winSecond = "   ";
+	Door x,y,z,firstChoiceDoor,firstGoatDoor,secondChoiceDoor;
+	x = hideCar(); //x hides car
+
+	setGoatDoor(x,y,z);
+	firstChoiceDoor = makeFirstChoice();
+
+	firstGoatDoor = openDoor(firstChoiceDoor,x);
+	secondChoiceDoor = makeSecondChoice(firstChoiceDoor,firstGoatDoor);
+
+	if(firstChoiceDoor == x)
+	{
+		win1 = win1 + 1;
+		winFirst = "yes";
+	}
+	else if(secondChoiceDoor == x)
+	{
+		win2 = win2 + 1;
+		winSecond = "yes";
+	}
+
+
+	if(count <= 9)
+	   s = "  ";
+	else if(count >= 10 && count < 100)
+	   s = " ";
+	else
+	   s = "";
+
+
+	cout<<s<<count<<"    "<<x<<"      "<<firstChoiceDoor<<"      "<<firstGoatDoor<<"      "<<secondChoiceDoor<<"   "<<winFirst<<"    "<<winSecond<<endl;
+
+
+	}
+
+void printHeader()
+{
+	cout<<"  #  Car  First Opened Second   Win    Win"<<endl;
+	cout<<"    here choice   door choice first second"<<endl;
+}
+Door hideCar()
+{
+	Door d1 = rand()%3 + 1;
+	return d1;
+}
+Door makeFirstChoice()
+{
+	return rand()%3 + 1;
+}
+
+void setGoatDoor(int& x,int& y,int& z)
+{
+	if(x == 1)
+	{
+		y = 2;
+		z = 3;
+	}
+	else if(x == 2)
+	{
+		y = 1;
+		z = 3;
+	}
+	else
+	{
+		y = 1;
+		z = 2;
+	}
+}
+
+Door openDoor(Door firstChoiceDoor, Door carBehindDoor)
+{
+	int firstGoatDoor,i;
+	i = firstChoiceDoor;
+	while(1)
+	{
+		i++;
+		if(i > 3)
+			i = 1;
+		if(i != carBehindDoor)
+		{
+			firstGoatDoor = i;
+			break;
+		}
+	}
+
+	return firstGoatDoor;
+
+}
+
+Door makeSecondChoice(Door firstChoiceDoor, Door openedDoor)
+{
+	for(int i = 1;i <= 3;i++)
+	{
+		if(i != firstChoiceDoor && i != openedDoor)
+			return i;
+	}
+}
+
+
